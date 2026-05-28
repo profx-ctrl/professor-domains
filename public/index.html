@@ -5,50 +5,306 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Professor Domains — Claim Your Free Domain</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #0a0a0a;
       color: #fff;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #e63946;
+    }
+    .nav-links a {
+      color: #aaa;
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .hero {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      text-align: center;
+      padding: 100px 20px 60px;
     }
-    .mask { font-size: 80px; margin-bottom: 20px; }
-    h1 { font-size: 2.5rem; color: #e63946; margin-bottom: 10px; }
-    p { color: #aaa; font-size: 1.1rem; margin-bottom: 30px; text-align: center; }
-    .quote {
-      border-left: 3px solid #e63946;
-      padding: 10px 20px;
-      color: #ccc;
-      font-style: italic;
-      margin-bottom: 40px;
+    .mask-icon {
+      font-size: 90px;
+      margin-bottom: 24px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .badge {
+      background: #e6394620;
+      color: #e63946;
+      border: 1px solid #e6394640;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    h1 span { color: #e63946; }
+    .subtitle {
+      color: #888;
+      font-size: 1.1rem;
       max-width: 500px;
-      text-align: left;
+      line-height: 1.7;
+      margin-bottom: 40px;
     }
-    .btn {
+    .search-box {
+      display: flex;
+      gap: 0;
+      width: 100%;
+      max-width: 520px;
+      margin-bottom: 16px;
+    }
+    .search-box input {
+      flex: 1;
+      background: #111;
+      border: 1px solid #222;
+      border-right: none;
+      color: #fff;
+      padding: 14px 20px;
+      font-size: 1rem;
+      border-radius: 8px 0 0 8px;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .search-box input:focus { border-color: #e63946; }
+    .search-box input::placeholder { color: #444; }
+    .suffix {
+      background: #1a1a1a;
+      border: 1px solid #222;
+      border-left: none;
+      color: #e63946;
+      padding: 14px 16px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    .search-box button {
       background: #e63946;
       color: #fff;
-      padding: 14px 36px;
       border: none;
-      border-radius: 8px;
+      padding: 14px 28px;
       font-size: 1rem;
+      font-weight: 600;
+      border-radius: 0 8px 8px 0;
       cursor: pointer;
-      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s;
     }
+    .search-box button:hover { background: #c1121f; }
+    .hint { color: #555; font-size: 0.85rem; }
+    .hint span { color: #e63946; }
+    .quote-section {
+      background: #0f0f0f;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    .quote-text {
+      font-size: 1.3rem;
+      color: #ccc;
+      font-style: italic;
+      max-width: 600px;
+      margin: 0 auto 16px;
+      line-height: 1.8;
+    }
+    .quote-author {
+      color: #e63946;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #e63946;
+    }
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+    .feature-card {
+      background: #111;
+      border: 1px solid #1a1a1a;
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+    .feature-card:hover { border-color: #e6394660; }
+    .feature-icon { font-size: 2rem; margin-bottom: 12px; }
+    .feature-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-desc { color: #666; font-size: 0.9rem; line-height: 1.6; }
+    footer {
+      border-top: 1px solid #1a1a1a;
+      padding: 30px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #444;
+      font-size: 0.85rem;
+    }
+    footer span { color: #e63946; }
   </style>
 </head>
 <body>
-  <div class="mask">🎭</div>
-  <h1>Professor Domains</h1>
-  <p>Free subdomains for everyone. No strings attached.</p>
-  <div class="quote">
-    "The greatest hacker is not the one who breaks in —
-    it's the one who was never locked out to begin with."
-    <br><br><strong style="color:#e63946">— The Professor</strong>
-  </div>
-  <a class="btn" href="#">Claim Your Domain</a>
+
+  <nav>
+    <div class="logo">🎭 Professor Domains</div>
+    <div class="nav-links">
+      <a href="#">Docs</a>
+      <a href="#">GitHub</a>
+      <a href="#" style="color:#e63946">Login</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="mask-icon">🎭</div>
+    <div class="badge">🔴 Free Forever — No Credit Card</div>
+    <h1>Your Free Domain.<br><span>No Strings Attached.</span></h1>
+    <p class="subtitle">Claim your free subdomain in seconds. Built for developers, students and creators who refuse to pay for a domain.</p>
+
+    <div class="search-box">
+      <input type="text" id="domainInput" placeholder="yourname" />
+      <div class="suffix">.is-a.dev</div>
+      <button onclick="checkDomain()">Claim →</button>
+    </div>
+    <p class="hint">Already claimed by <span>1,247</span> people today</p>
+  </section>
+
+  <section class="quote-section">
+    <p class="quote-text" id="quote">"The best plans are the ones that leave nothing to chance."</p>
+    <p class="quote-author">— The Professor</p>
+  </section>
+
+  <section class="stats">
+    <div>
+      <div class="stat-number" id="counter">0</div>
+      <div class="stat-label">Domains Claimed</div>
+    </div>
+    <div>
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Free Forever</div>
+    </div>
+    <div>
+      <div class="stat-number">24h</div>
+      <div class="stat-label">Avg Approval Time</div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Instant Setup</div>
+      <div class="feature-desc">Claim your domain in seconds. No forms, no waiting weeks. Just your name and you're live.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">Fully Yours</div>
+      <div class="feature-desc">Point it anywhere. Netlify, Vercel, GitHub Pages, your own server. Full DNS control.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎭</div>
+      <div class="feature-title">Built Different</div>
+      <div class="feature-desc">Not just another free domain service. This is the heist — we take from the expensive and give to the free.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">For Everyone</div>
+      <div class="feature-desc">Students, developers, creators. If you have a dream and zero budget, this is for you.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div>🎭 Professor Domains — Built with zero budget, unlimited vision</div>
+    <div>Made with ❤️ & <span>Bella Ciao</span></div>
+  </footer>
+
+  <script>
+    const quotes = [
+      "The best plans are the ones that leave nothing to chance.",
+      "Every detail matters. Every single one.",
+      "We are not criminals. We are people who refuse to accept the rules.",
+      "Flexibility is the most important thing in any plan.",
+      "The greater the risk, the greater the reward.",
+      "They have the weapons. We have the intelligence.",
+      "Chaos is not our enemy. It is our greatest ally."
+    ];
+
+    let q = 0;
+    setInterval(() => {
+      q = (q + 1) % quotes.length;
+      document.getElementById('quote').style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById('quote').textContent = '"' + quotes[q] + '"';
+        document.getElementById('quote').style.opacity = 1;
+      }, 300);
+    }, 4000);
+
+    document.getElementById('quote').style.transition = 'opacity 0.3s';
+
+    let count = 0;
+    const target = 4823;
+    const inc = Math.ceil(target / 100);
+    const timer = setInterval(() => {
+      count = Math.min(count + inc, target);
+      document.getElementById('counter').textContent = count.toLocaleString();
+      if (count >= target) clearInterval(timer);
+    }, 20);
+
+    function checkDomain() {
+      const val = document.getElementById('domainInput').value.trim();
+      if (!val) return;
+      alert('🎭 ' + val + '.is-a.dev — Coming soon! Registration opens shortly.');
+    }
+  </script>
+
 </body>
 </html>
