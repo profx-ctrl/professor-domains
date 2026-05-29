@@ -3,226 +3,308 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Professor Domains — Claim Your Free Domain</title>
+  <title>Professor Domains — Free Subdomains For Everyone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #0a0a0a;
       color: #fff;
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
+      overflow-x: hidden;
     }
+    a { text-decoration: none; }
+
+    /* NAV */
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 40px;
+      padding: 18px 40px;
       border-bottom: 1px solid #1a1a1a;
+      position: sticky;
+      top: 0;
+      background: #0a0a0aee;
+      backdrop-filter: blur(10px);
+      z-index: 100;
     }
     .logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #e63946;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #e63946;
+      gap: 8px;
     }
-    .nav-links a {
-      color: #aaa;
-      text-decoration: none;
-      margin-left: 24px;
-      font-size: 0.9rem;
-      transition: color 0.2s;
+    .nav-btn {
+      background: #e63946;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background 0.2s;
     }
-    .nav-links a:hover { color: #fff; }
+    .nav-btn:hover { background: #c1121f; }
+
+    /* HERO */
     .hero {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       text-align: center;
-      padding: 100px 20px 60px;
+      padding: 80px 20px 60px;
     }
     .mask-icon {
-      font-size: 90px;
-      margin-bottom: 24px;
+      font-size: 80px;
+      margin-bottom: 20px;
       animation: float 3s ease-in-out infinite;
+      display: block;
     }
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
     }
     .badge {
-      background: #e6394620;
+      background: #e6394615;
       color: #e63946;
-      border: 1px solid #e6394640;
-      padding: 6px 16px;
+      border: 1px solid #e6394635;
+      padding: 5px 14px;
       border-radius: 20px;
-      font-size: 0.8rem;
-      margin-bottom: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      display: inline-block;
     }
     h1 {
-      font-size: 3.5rem;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 20px;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      max-width: 700px;
     }
     h1 span { color: #e63946; }
-    .subtitle {
-      color: #888;
-      font-size: 1.1rem;
-      max-width: 500px;
+    .hero-sub {
+      color: #777;
+      font-size: 1rem;
+      max-width: 460px;
       line-height: 1.7;
       margin-bottom: 40px;
     }
+
+    /* SEARCH */
+    .search-wrap {
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 12px;
+    }
     .search-box {
       display: flex;
-      gap: 0;
       width: 100%;
-      max-width: 520px;
-      margin-bottom: 16px;
+      border: 1px solid #222;
+      border-radius: 10px;
+      overflow: hidden;
     }
+    .search-box:focus-within { border-color: #e63946; }
     .search-box input {
       flex: 1;
       background: #111;
-      border: 1px solid #222;
-      border-right: none;
+      border: none;
       color: #fff;
-      padding: 14px 20px;
-      font-size: 1rem;
-      border-radius: 8px 0 0 8px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
       outline: none;
       font-family: 'Inter', sans-serif;
+      min-width: 0;
     }
-    .search-box input:focus { border-color: #e63946; }
     .search-box input::placeholder { color: #444; }
-    .suffix {
-      background: #1a1a1a;
-      border: 1px solid #222;
-      border-left: none;
+    .search-suffix {
+      background: #161616;
       color: #e63946;
-      padding: 14px 16px;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
+      padding: 14px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+      border-left: 1px solid #222;
     }
     .search-box button {
       background: #e63946;
       color: #fff;
       border: none;
-      padding: 14px 28px;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 0 8px 8px 0;
+      padding: 14px 22px;
+      font-size: 0.9rem;
+      font-weight: 700;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       transition: background 0.2s;
+      white-space: nowrap;
     }
     .search-box button:hover { background: #c1121f; }
-    .hint { color: #555; font-size: 0.85rem; }
-    .hint span { color: #e63946; }
+    .search-hint {
+      color: #444;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    .search-hint span { color: #e63946; }
+
+    /* QUOTE */
     .quote-section {
-      background: #0f0f0f;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-      padding: 50px 20px;
+      background: #0d0d0d;
+      border-top: 1px solid #181818;
+      border-bottom: 1px solid #181818;
+      padding: 48px 20px;
       text-align: center;
     }
     .quote-text {
-      font-size: 1.3rem;
-      color: #ccc;
+      font-size: 1.2rem;
+      color: #bbb;
       font-style: italic;
-      max-width: 600px;
-      margin: 0 auto 16px;
+      max-width: 580px;
+      margin: 0 auto 14px;
       line-height: 1.8;
-      transition: opacity 0.3s;
+      transition: opacity 0.3s ease;
     }
     .quote-author {
       color: #e63946;
-      font-weight: 600;
-      font-size: 0.9rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
     }
+
+    /* STATS */
     .stats {
       display: flex;
       justify-content: center;
-      gap: 60px;
+      flex-wrap: wrap;
+      gap: 40px;
       padding: 60px 20px;
       text-align: center;
     }
     .stat-number {
-      font-size: 2.5rem;
-      font-weight: 700;
+      font-size: 2.2rem;
+      font-weight: 800;
       color: #e63946;
     }
     .stat-label {
-      color: #666;
-      font-size: 0.9rem;
+      color: #555;
+      font-size: 0.85rem;
       margin-top: 4px;
+    }
+
+    /* FEATURES */
+    .features-section {
+      padding: 0 20px 80px;
+    }
+    .features-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 32px;
+      color: #eee;
     }
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      max-width: 900px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      max-width: 880px;
       margin: 0 auto;
-      padding: 0 20px 80px;
     }
     .feature-card {
       background: #111;
-      border: 1px solid #1a1a1a;
+      border: 1px solid #1c1c1c;
       border-radius: 12px;
-      padding: 24px;
-      transition: border-color 0.2s;
+      padding: 22px;
+      transition: border-color 0.2s, transform 0.2s;
     }
-    .feature-card:hover { border-color: #e6394660; }
-    .feature-icon { font-size: 2rem; margin-bottom: 12px; }
-    .feature-title {
+    .feature-card:hover {
+      border-color: #e6394650;
+      transform: translateY(-2px);
+    }
+    .feature-icon { font-size: 1.8rem; margin-bottom: 10px; }
+    .feature-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .feature-desc { color: #555; font-size: 0.85rem; line-height: 1.6; }
+
+    /* CTA */
+    .cta-section {
+      background: #0d0d0d;
+      border-top: 1px solid #181818;
+      padding: 70px 20px;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .cta-section h2 span { color: #e63946; }
+    .cta-section p {
+      color: #666;
+      margin-bottom: 28px;
+      font-size: 0.95rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #e63946;
+      color: #fff;
+      padding: 14px 36px;
+      border-radius: 10px;
+      font-weight: 700;
       font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 8px;
+      transition: background 0.2s;
     }
-    .feature-desc { color: #666; font-size: 0.9rem; line-height: 1.6; }
+    .cta-btn:hover { background: #c1121f; }
+
+    /* FOOTER */
     footer {
-      border-top: 1px solid #1a1a1a;
-      padding: 30px 40px;
+      border-top: 1px solid #161616;
+      padding: 24px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: #444;
-      font-size: 0.85rem;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: #333;
+      font-size: 0.82rem;
     }
     footer span { color: #e63946; }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      h1 { font-size: 2rem; }
+      .stats { gap: 24px; }
+      footer { padding: 20px; flex-direction: column; text-align: center; }
+    }
   </style>
 </head>
 <body>
 
   <nav>
     <div class="logo">🎭 Professor Domains</div>
-    <div class="nav-links">
-      <a href="#">Docs</a>
-      <a href="#">GitHub</a>
-      <a href="register.html" style="color:#e63946">Claim Free Domain</a>
-    </div>
+    <a class="nav-btn" href="register.html">Claim Free Domain</a>
   </nav>
 
   <section class="hero">
-    <div class="mask-icon">🎭</div>
-    <div class="badge">🔴 Free Forever — No Credit Card</div>
+    <span class="mask-icon">🎭</span>
+    <div class="badge">🔴 100% Free — No Credit Card — No Catch</div>
     <h1>Your Free Domain.<br><span>No Strings Attached.</span></h1>
-    <p class="subtitle">Claim your free subdomain in seconds. Built for developers, students and creators who refuse to pay for a domain.</p>
+    <p class="hero-sub">Claim your free subdomain in seconds. Built for developers, students and creators who refuse to pay.</p>
 
-    <div class="search-box">
-      <input type="text" id="domainInput" placeholder="yourname" />
-      <div class="suffix">.is-a.dev</div>
-      <button onclick="checkDomain()">Claim →</button>
+    <div class="search-wrap">
+      <div class="search-box">
+        <input type="text" id="domainInput" placeholder="yourname" maxlength="50" />
+        <div class="search-suffix">.is-a.dev</div>
+        <button onclick="checkDomain()">Claim →</button>
+      </div>
     </div>
-    <p class="hint">Already claimed by <span>1,247</span> people today</p>
+    <p class="search-hint">Join <span id="liveCount">4,823</span> others who already claimed theirs</p>
   </section>
 
   <section class="quote-section">
     <p class="quote-text" id="quote">"The best plans are the ones that leave nothing to chance."</p>
-    <p class="quote-author">— The Professor</p>
+    <p class="quote-author">— The Professor, La Casa de Papel</p>
   </section>
 
   <section class="stats">
@@ -236,39 +318,78 @@
     </div>
     <div>
       <div class="stat-number">24h</div>
-      <div class="stat-label">Avg Approval Time</div>
+      <div class="stat-label">Avg Activation Time</div>
+    </div>
+    <div>
+      <div class="stat-number">0₹</div>
+      <div class="stat-label">Cost To You</div>
     </div>
   </section>
 
-  <section class="features">
-    <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <div class="feature-title">Instant Setup</div>
-      <div class="feature-desc">Claim your domain in seconds. No forms, no waiting weeks. Just your name and you're live.</div>
+  <section class="features-section">
+    <p class="features-title">Why Professor Domains?</p>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Instant Claim</div>
+        <div class="feature-desc">Fill one form, get your domain. No waiting weeks, no complicated setup.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">Point Anywhere</div>
+        <div class="feature-desc">Netlify, Vercel, GitHub Pages, your own server. Full DNS freedom.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎭</div>
+        <div class="feature-title">Built Different</div>
+        <div class="feature-desc">We take from the expensive and give to the free. That's the heist.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <div class="feature-title">For Everyone</div>
+        <div class="feature-desc">Zero budget? No problem. If you have a dream, you deserve a domain.</div>
+      </div>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔒</div>
-      <div class="feature-title">Fully Yours</div>
-      <div class="feature-desc">Point it anywhere. Netlify, Vercel, GitHub Pages, your own server. Full DNS control.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎭</div>
-      <div class="feature-title">Built Different</div>
-      <div class="feature-desc">Not just another free domain service. This is the heist — we take from the expensive and give to the free.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🌍</div>
-      <div class="feature-title">For Everyone</div>
-      <div class="feature-desc">Students, developers, creators. If you have a dream and zero budget, this is for you.</div>
-    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Ready to join<br><span>the heist?</span></h2>
+    <p>Thousands already claimed their free domain. Your turn.</p>
+    <a class="cta-btn" href="register.html">🎭 Claim Your Free Domain</a>
   </section>
 
   <footer>
     <div>🎭 Professor Domains — Built with zero budget, unlimited vision</div>
-    <div>Made with ❤️ & <span>Bella Ciao</span></div>
+    <div>Made with ❤️ &amp; <span>Bella Ciao</span></div>
   </footer>
 
   <script>
+    const { createClient } = supabase;
+    const db = createClient(
+      'https://ksremotcyngdadfaakgk.supabase.co',
+      'sb_publishable_UvuTgI-fAeCv-Qz1dwtOTw_iTJJG0R0'
+    );
+
+    async function loadCount() {
+      const { count } = await db.from('domains').select('*', { count: 'exact', head: true });
+      const total = (count || 0) + 4823;
+      animateCount(total);
+      document.getElementById('liveCount').textContent = total.toLocaleString();
+    }
+
+    function animateCount(target) {
+      let count = 0;
+      const inc = Math.ceil(target / 80);
+      const el = document.getElementById('counter');
+      const timer = setInterval(() => {
+        count = Math.min(count + inc, target);
+        el.textContent = count.toLocaleString();
+        if (count >= target) clearInterval(timer);
+      }, 20);
+    }
+
+    loadCount();
+
     const quotes = [
       "The best plans are the ones that leave nothing to chance.",
       "Every detail matters. Every single one.",
@@ -276,33 +397,35 @@
       "Flexibility is the most important thing in any plan.",
       "The greater the risk, the greater the reward.",
       "They have the weapons. We have the intelligence.",
-      "Chaos is not our enemy. It is our greatest ally."
+      "Chaos is not our enemy. It is our greatest ally.",
+      "I have spent years planning this. Every move, every contingency.",
+      "The most dangerous person is the one with nothing to lose.",
+      "Every revolution needs its Professor."
     ];
 
     let q = 0;
+    const quoteEl = document.getElementById('quote');
     setInterval(() => {
-      q = (q + 1) % quotes.length;
-      document.getElementById('quote').style.opacity = 0;
+      quoteEl.style.opacity = 0;
       setTimeout(() => {
-        document.getElementById('quote').textContent = '"' + quotes[q] + '"';
-        document.getElementById('quote').style.opacity = 1;
+        q = (q + 1) % quotes.length;
+        quoteEl.textContent = '"' + quotes[q] + '"';
+        quoteEl.style.opacity = 1;
       }, 300);
     }, 4000);
 
-    let count = 0;
-    const target = 4823;
-    const inc = Math.ceil(target / 100);
-    const timer = setInterval(() => {
-      count = Math.min(count + inc, target);
-      document.getElementById('counter').textContent = count.toLocaleString();
-      if (count >= target) clearInterval(timer);
-    }, 20);
-
     function checkDomain() {
       const val = document.getElementById('domainInput').value.trim();
-      if (!val) return;
-      window.location.href = 'register.html?subdomain=' + val;
+      if (!val) {
+        document.getElementById('domainInput').focus();
+        return;
+      }
+      window.location.href = 'register.html?subdomain=' + encodeURIComponent(val);
     }
+
+    document.getElementById('domainInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkDomain();
+    });
   </script>
 
 </body>
