@@ -136,6 +136,7 @@
       max-width: 600px;
       margin: 0 auto 16px;
       line-height: 1.8;
+      transition: opacity 0.3s;
     }
     .quote-author {
       color: #e63946;
@@ -201,7 +202,7 @@
     <div class="nav-links">
       <a href="#">Docs</a>
       <a href="#">GitHub</a>
-      <a href="#" style="color:#e63946">Login</a>
+      <a href="register.html" style="color:#e63946">Claim Free Domain</a>
     </div>
   </nav>
 
@@ -288,8 +289,6 @@
       }, 300);
     }, 4000);
 
-    document.getElementById('quote').style.transition = 'opacity 0.3s';
-
     let count = 0;
     const target = 4823;
     const inc = Math.ceil(target / 100);
@@ -302,7 +301,7 @@
     function checkDomain() {
       const val = document.getElementById('domainInput').value.trim();
       if (!val) return;
-      alert('🎭 ' + val + '.is-a.dev — Coming soon! Registration opens shortly.');
+      window.location.href = 'register.html?subdomain=' + val;
     }
   </script>
 
