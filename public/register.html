@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Domain — Professor Domains</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #111;
+      border: 1px solid #1a1a1a;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 480px;
+    }
+    .logo {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    input, select {
+      width: 100%;
+      background: #0a0a0a;
+      border: 1px solid #222;
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus { border-color: #e63946; }
+    .domain-row {
+      display: flex;
+      gap: 0;
+    }
+    .domain-row input {
+      border-radius: 8px 0 0 8px;
+      border-right: none;
+    }
+    .domain-suffix {
+      background: #1a1a1a;
+      border: 1px solid #222;
+      border-left: none;
+      color: #e63946;
+      padding: 12px 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+    }
+    .btn {
+      width: 100%;
+      background: #e63946;
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    .btn:hover { background: #c1121f; }
+    .btn:disabled { background: #333; cursor: not-allowed; }
+    .msg {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      display: none;
+    }
+    .msg.success {
+      background: #16a08520;
+      border: 1px solid #16a08540;
+      color: #16a085;
+      display: block;
+    }
+    .msg.error {
+      background: #e6394620;
+      border: 1px solid #e6394640;
+      color: #e63946;
+      display: block;
+    }
+    .back {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back a {
+      color: #666;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    .back a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🎭</div>
+    <h1>Claim Your Domain</h1>
+    <p class="subtitle">Free forever. No credit card needed.</p>
+
+    <div class="form-group">
+      <label>Your Email</label>
+      <input type="email" id="email" placeholder="you@example.com" />
+    </div>
+
+    <div class="form-group">
+      <label>Subdomain</label>
+      <div class="domain-row">
+        <input type="text" id="subdomain" placeholder="yourname" />
+        <div class="domain-suffix">.is-a.dev</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Points To (your site URL or IP)</label>
+      <input type="text" id="record" placeholder="yoursite.netlify.app" />
+    </div>
+
+    <button class="btn" onclick="register()" id="btn">
+      🎭 Claim Domain
+    </button>
+
+    <div class="msg" id="msg"></div>
+
+    <div class="back">
+      <a href="/">← Back to home</a>
+    </div>
+  </div>
+
+  <script>
+    const { createClient } = supabase;
+    const db = createClient(
+      'https://ksremotcyngdadfaakgk.supabase.co',
+      'sb_publishable_UvuTgI-fAeCv-Qz1dwtOTw_iTJJG0R0'
+    );
+
+    async function register() {
+      const email = document.getElementById('email').value.trim();
+      const subdomain = document.getElementById('subdomain').value.trim().toLowerCase();
+      const record = document.getElementById('record').value.trim();
+      const btn = document.getElementById('btn');
+      const msg = document.getElementById('msg');
+
+      msg.className = 'msg';
+      msg.textContent = '';
+
+      if (!email || !subdomain || !record) {
+        msg.className = 'msg error';
+        msg.textContent = 'All fields are required.';
+        return;
+      }
+
+      if (!/^[a-z0-9-]+$/.test(subdomain)) {
+        msg.className = 'msg error';
+        msg.textContent = 'Subdomain can only contain letters, numbers and hyphens.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Processing...';
+
+      const { error } = await db.from('domains').insert([{
+        subdomain,
+        email,
+        record_value: record,
+        status: 'pending'
+      }]);
+
+      if (error) {
+        if (error.code === '23505') {
+          msg.className = 'msg error';
+          msg.textContent = '❌ That subdomain is already taken. Try another.';
+        } else {
+          msg.className = 'msg error';
+          msg.textContent = '❌ Error: ' + error.message;
+        }
+        btn.disabled = false;
+        btn.textContent = '🎭 Claim Domain';
+        return;
+      }
+
+      msg.className = 'msg success';
+      msg.textContent = '✅ Domain claimed! ' + subdomain + '.is-a.dev is now yours. Activation within 24h.';
+      btn.textContent = '✅ Claimed!';
+    }
+  </script>
+</body>
+</html>
